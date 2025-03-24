@@ -77,6 +77,19 @@ class _HomePageState extends State<HomePage> {
         } else if (state is ProductError) {
           products = state.oldProducts;
         }
+
+        if (state is ProductLoading && state.isFirstFetch) {
+          return Scaffold(
+            backgroundColor: context.colors.primary01,
+            body: Center(
+                child: CupertinoActivityIndicator(
+                  color: context.colors.primary,
+                  radius: 15,
+                )
+            ),
+          );
+        }
+
         return Scaffold(
           backgroundColor: context.colors.primary01,
           body: CustomScrollView(
@@ -96,7 +109,6 @@ class _HomePageState extends State<HomePage> {
                     icon: Icon(CupertinoIcons.heart_fill, color: context.colors.warningDark,),
                     onPressed: () {
                       context.push(const FavouritePage());
-                      // context.read<ProductBloc>().add(const FetchProductsEvent(refresh: true));
                     },
                   ),
                 ],
@@ -112,27 +124,34 @@ class _HomePageState extends State<HomePage> {
                   ),
                   delegate: SliverChildBuilderDelegate(
                         (context, index) {
+                      // No need for the loading check here anymore
                       if (index >= products.length) {
-                        return  SizedBox(
-                            width: 1.sw,
-                            child: Center(child: CupertinoActivityIndicator(color: context.colors.primary, radius: 15,)));
+                        return const SizedBox(); // Return empty instead of a loader
                       }
                       final drink = products[index];
                       return ProductItemWidget(
                         productModel: drink,
                       );
                     },
-                    childCount: (state is ProductLoaded && !state.hasReachedMax || isLoading)
-                        ? products.length + 1
-                        : products.length,
+                    childCount: products.length,
                   ),
                 ),
               ),
-              // if (state is ProductLoading && state.isFirstFetch)
-              //    SliverFillRemaining(
-              //     child: Center(child: CupertinoActivityIndicator(color: context.colors.primary, radius: 15,)),
+
+              // if (isLoading && !state is Firs)
+              //   SliverToBoxAdapter(
+              //     child: Center(
+              //       child: Padding(
+              //         padding: EdgeInsets.all(16.0),
+              //         child: CupertinoActivityIndicator(
+              //           color: context.colors.primary,
+              //           radius: 15,
+              //         ),
+              //       ),
+              //     ),
               //   ),
-              if (products.isEmpty && !(state is ProductLoading && state.isFirstFetch))
+
+              if (products.isEmpty && state is! ProductLoading)
                 SliverFillRemaining(
                   child: Center(
                     child: Column(

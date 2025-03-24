@@ -31,7 +31,7 @@ class _BasketPageState extends State<BasketPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: context.colors.primary2,
+      backgroundColor: const Color(0xFF0C111D),
       appBar: BaseAppBar(
         title: "Корзина",
         actions: [

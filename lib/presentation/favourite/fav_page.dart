@@ -19,6 +19,12 @@ class FavouritePage extends StatefulWidget {
 }
 
 class _FavouritePageState extends State<FavouritePage> {
+
+  @override
+  void initState() {
+    context.read<BasketBloc>().add(LoadBasketEvent());
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
   return  BlocBuilder<BasketBloc, BasketState>(
