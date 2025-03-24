@@ -124,9 +124,8 @@ class _HomePageState extends State<HomePage> {
                   ),
                   delegate: SliverChildBuilderDelegate(
                         (context, index) {
-                      // No need for the loading check here anymore
                       if (index >= products.length) {
-                        return const SizedBox(); // Return empty instead of a loader
+                        return const SizedBox();
                       }
                       final drink = products[index];
                       return ProductItemWidget(
